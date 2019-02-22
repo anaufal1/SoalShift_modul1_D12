@@ -67,10 +67,31 @@ Urandom digunakan untuk meng-generate sembarang karakter. Namun karena output ya
 
 Setelah password baru terbentuk, dilakukan looping untuk melihat apakah ada password yang ada sebelumnya. Jika ada, maka dilakukan generate lagi. Jika tidak, maka password akan dimasukkan ke file password[i].txt dengan I adalah indeks yang ada.
 
-4.      4. Lakukan backup file syslog setiap jam dengan format nama file “jam:menit tanggal-bulan-tahun”. Isi dari file backup terenkripsi dengan konversi huruf (string manipulation) yang disesuaikan dengan jam dilakukannya backup misalkan sebagai berikut:
+4.      Lakukan backup file syslog setiap jam dengan format nama file “jam:menit tanggal-bulan-tahun”. Isi dari file backup terenkripsi dengan konversi huruf (string manipulation) yang disesuaikan dengan jam dilakukannya backup misalkan sebagai berikut:
         a. Huruf b adalah alfabet kedua, sedangkan saat ini waktu menunjukkan pukul 12, sehingga huruf b diganti dengan huruf alfabet yang memiliki urutan ke 12+2 = 14.
         b. Hasilnya huruf b menjadi huruf n karena huruf n adalah huruf ke empat belas, dan seterusnya. 
         c. setelah huruf z akan kembali ke huruf a
         d. Backup file syslog setiap jam.
         e. dan buatkan juga bash script untuk dekripsinya.
+      jawab : Jalankan soal4_1.sh untuk encrypt syslog
+               jalankan soal4_2.sh untuk decrypt ziped log
+               
+5.     5. Buatlah sebuah script bash untuk menyimpan record dalam syslog yang memenuhi kriteria berikut:
+        a. Tidak mengandung string “sudo”, tetapi mengandung string “cron”, serta buatlah pencarian stringnya tidak bersifat case sensitive, sehingga huruf kapital atau tidak, tidak menjadi masalah.
+        b. Jumlah field (number of field) pada baris tersebut berjumlah kurang dari 13.
+        c. Masukkan record tadi ke dalam file logs yang berada pada direktori /home/[user]/modul1.
+        
+         karena pencariannya bukan sudo tetapi cron, maka `!sudo && cron`
+ pencarian string tidak bersifat sensitive menggunakan `tolower($0)` untuk membuat seluruh *string* tersebut menjadi *lowercase* 
 
+    ```bash
+    awk 'tolower($0) ~!/sudo/ && tolower($0) ~/cron/ {print $0;}'
+    ```
+
+ untuk menampilkan field kurang dari 13, gunakan
+
+   ```bash
+   awk 'NF < 13'
+   ```
+
+ untuk menjalankan script tersebut setiap 6 menit dari menit ke 2 hingga 30, contoh 13:02, 13:08, 13:14, dst. gunakan `crontab -e`
