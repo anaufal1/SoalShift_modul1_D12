@@ -1,16 +1,14 @@
-#!/bin/bash
-loop=1
+
+g_pass=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -n 1)
+
+name="password"
 num=1
 
-while [ $loop -ne 0 ]
+while [ -f "$name$num.txt" ]
 do
-if [[ -f /home/absolutlubis/Documents/soalshift1/password$num.txt ]];
-then
-	num=$((num + 1))
-else
-
-cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -1> /home/absolutlubis/Documents/soalshift1/password$num.txt
-loop=0
-
-fi
+ num=$((num+1))
 done
+
+`touch "$name$num.txt"`
+fname="$name$num.txt"
+echo "$num$g_pass" > $fname
